@@ -7,34 +7,40 @@ class Product(Base):
     __tablename__ = "products"
 
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     name = Column(String, index=True, nullable=False)
-    sku = Column(String, unique=True, index=True, nullable=False)
+    sku = Column(String, index=True, nullable=False)
     price = Column(Float, nullable=False)
     quantity = Column(Integer, nullable=False, default=0)
 
     # Relationships
+    user = relationship("User")
     order_items = relationship("OrderItem", back_populates="product")
 
 class Customer(Base):
     __tablename__ = "customers"
 
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     full_name = Column(String, index=True, nullable=False)
-    email = Column(String, unique=True, index=True, nullable=False)
+    email = Column(String, index=True, nullable=False)
     phone = Column(String, nullable=True)
 
     # Relationships
+    user = relationship("User")
     orders = relationship("Order", back_populates="customer", cascade="all, delete-orphan")
 
 class Order(Base):
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
     total_amount = Column(Float, nullable=False, default=0.0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
+    user = relationship("User")
     customer = relationship("Customer", back_populates="orders")
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
 
@@ -58,4 +64,3 @@ class User(Base):
     username = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-

@@ -25,56 +25,60 @@ const Signup = () => {
 
   if (success) {
     return (
-      <div style={{ width: '100%', maxWidth: '400px', padding: '2rem', background: 'var(--card-bg)', borderRadius: '8px', textAlign: 'center' }}>
-        <h2 style={{ color: 'var(--success-color)' }}>Signup Successful!</h2>
-        <p>Redirecting to login page...</p>
+      <div className="auth-container">
+        <div className="auth-card text-center">
+          <h2 className="text-success mb-4">Signup Successful!</h2>
+          <p className="text-muted">Redirecting to login page...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div style={{ width: '100%', maxWidth: '400px', padding: '2rem', background: 'var(--card-bg)', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-      <h1 className="mb-6" style={{ textAlign: 'center' }}>Create Account</h1>
-      {error && <div style={{ color: 'var(--danger-color)', marginBottom: '1rem', textAlign: 'center' }}>{error}</div>}
-      
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="form-label">Username</label>
-          <input 
-            type="text" 
-            className="form-control" 
-            value={formData.username} 
-            onChange={(e) => setFormData({...formData, username: e.target.value})}
-            required
-            minLength={3}
-          />
+    <div className="auth-container">
+      <div className="auth-card">
+        <h1 className="mb-6 text-center" style={{ fontSize: '1.75rem', letterSpacing: '-0.03em' }}>Create Account</h1>
+        {error && <div className="badge badge-danger mb-4 w-full flex-center p-3">{error}</div>}
+        
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label className="form-label">Username</label>
+            <input 
+              type="text" 
+              className="form-control" 
+              value={formData.username} 
+              onChange={(e) => setFormData({...formData, username: e.target.value})}
+              required
+              minLength={3}
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input 
+              type="email" 
+              className="form-control" 
+              value={formData.email} 
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Password</label>
+            <input 
+              type="password" 
+              className="form-control" 
+              value={formData.password} 
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              required
+              minLength={6}
+            />
+          </div>
+          <button type="submit" className="btn btn-primary w-full mt-4 p-3" style={{ fontSize: '1rem' }}>Sign Up</button>
+        </form>
+        
+        <div className="mt-6 text-center text-muted">
+          Already have an account? <Link to="/login" className="text-success" style={{ fontWeight: 600 }}>Sign In</Link>
         </div>
-        <div className="form-group">
-          <label className="form-label">Email</label>
-          <input 
-            type="email" 
-            className="form-control" 
-            value={formData.email} 
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label className="form-label">Password</label>
-          <input 
-            type="password" 
-            className="form-control" 
-            value={formData.password} 
-            onChange={(e) => setFormData({...formData, password: e.target.value})}
-            required
-            minLength={6}
-          />
-        </div>
-        <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '1rem', padding: '0.75rem' }}>Sign Up</button>
-      </form>
-      
-      <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-        Already have an account? <Link to="/login" style={{ color: 'var(--primary-color)' }}>Login</Link>
       </div>
     </div>
   );

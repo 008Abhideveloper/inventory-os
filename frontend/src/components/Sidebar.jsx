@@ -13,8 +13,10 @@ const Sidebar = ({ theme, toggleTheme }) => {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
-        <FiBox size={24} />
-        <span>InventoryOS</span>
+        <div className="flex-center" style={{ width: '40px', height: '40px', background: 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))', color: 'white', borderRadius: 'var(--radius-md)' }}>
+          <FiBox size={24} />
+        </div>
+        <span>Inventory<span style={{ fontWeight: 300 }}>OS</span></span>
       </div>
       <nav className="sidebar-nav">
         <NavLink 
@@ -48,14 +50,14 @@ const Sidebar = ({ theme, toggleTheme }) => {
         </NavLink>
       </nav>
       <div className="theme-toggle-container">
-        <button className="btn btn-outline" style={{ width: '100%', justifyContent: 'center', marginBottom: '0.5rem' }} onClick={toggleTheme}>
+        <button className="btn btn-outline" style={{ width: '100%', justifyContent: 'center' }} onClick={toggleTheme}>
           {theme === 'light' ? (
             <><FiMoon size={18} style={{ marginRight: '0.5rem' }} /> Dark Mode</>
           ) : (
             <><FiSun size={18} style={{ marginRight: '0.5rem' }} /> Light Mode</>
           )}
         </button>
-        <button className="btn btn-danger" style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center' }} onClick={handleLogout}>
+        <button className="btn btn-outline text-danger" style={{ width: '100%', justifyContent: 'center', borderColor: 'transparent', backgroundColor: 'rgba(239, 68, 68, 0.05)' }} onClick={handleLogout}>
           <FiLogOut size={18} style={{ marginRight: '0.5rem' }} /> Logout
         </button>
       </div>

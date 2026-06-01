@@ -46,9 +46,13 @@ const Customers = () => {
   };
 
   return (
-    <div>
-      <div className="flex-between mb-6">
-        <h1>Customers</h1>
+  return (
+    <div className="animation-fade-in">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Customers</h1>
+          <p className="text-muted mt-2">Manage your customer relationships</p>
+        </div>
         <button 
           className="btn btn-primary"
           onClick={() => {
@@ -64,30 +68,49 @@ const Customers = () => {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Full Name</th>
+              <th>Customer</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Actions</th>
+              <th style={{ textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {customers.map((c) => (
               <tr key={c.id}>
-                <td>{c.id}</td>
-                <td>{c.full_name}</td>
-                <td>{c.email}</td>
-                <td>{c.phone || 'N/A'}</td>
                 <td>
-                  <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(c.id)}>
-                    <FiTrash2 size={14} />
-                  </button>
+                  <div className="flex" style={{ alignItems: 'center', gap: '1rem' }}>
+                    <div className="avatar">
+                      {c.full_name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 500 }}>{c.full_name}</div>
+                      <div className="text-muted" style={{ fontSize: '0.8rem' }}>ID: #{c.id}</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span className="text-muted">{c.email}</span></td>
+                <td>{c.phone || <span className="text-muted italic">N/A</span>}</td>
+                <td>
+                  <div className="flex" style={{ justifyContent: 'flex-end' }}>
+                    <button className="btn btn-outline" style={{ padding: '0.4rem', border: 'none', color: 'var(--danger-color)' }} onClick={() => handleDelete(c.id)}>
+                      <FiTrash2 size={16} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
             {customers.length === 0 && (
               <tr>
-                <td colSpan="5" style={{ textAlign: 'center' }}>No customers found</td>
+                <td colSpan="4" className="text-center text-muted" style={{ padding: '4rem 2rem' }}>
+                  <div className="flex-center" style={{ flexDirection: 'column', gap: '1rem' }}>
+                    <FiUsers size={48} style={{ opacity: 0.3 }} />
+                    <h3 style={{ color: 'var(--text-main)' }}>No customers found</h3>
+                    <p>Start building your customer base.</p>
+                    <button className="btn btn-primary mt-4" onClick={() => setShowModal(true)}>
+                      <FiPlus /> Add Customer
+                    </button>
+                  </div>
+                </td>
               </tr>
             )}
           </tbody>
@@ -98,10 +121,10 @@ const Customers = () => {
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <h2 className="modal-title">Add Customer</h2>
+              <h2 className="modal-title">Add New Customer</h2>
               <button className="modal-close" onClick={() => setShowModal(false)}>&times;</button>
             </div>
-            {error && <div style={{ color: 'var(--danger-color)', marginBottom: '1rem' }}>{error}</div>}
+            {error && <div className="badge badge-danger mb-4 w-full flex-center p-3">{error}</div>}
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label className="form-label">Full Name</label>
@@ -111,30 +134,33 @@ const Customers = () => {
                   value={formData.full_name} 
                   onChange={(e) => setFormData({...formData, full_name: e.target.value})}
                   required
+                  placeholder="e.g. Jane Doe"
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">Email</label>
+                <label className="form-label">Email Address</label>
                 <input 
                   type="email" 
                   className="form-control" 
                   value={formData.email} 
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   required
+                  placeholder="jane@example.com"
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">Phone (Optional)</label>
+                <label className="form-label">Phone Number <span className="text-muted" style={{ fontWeight: 'normal' }}>(Optional)</span></label>
                 <input 
                   type="text" 
                   className="form-control" 
                   value={formData.phone} 
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  placeholder="+1 (555) 000-0000"
                 />
               </div>
-              <div className="flex-between">
-                <button type="button" className="btn" onClick={() => setShowModal(false)}>Cancel</button>
-                <button type="submit" className="btn btn-primary">Save</button>
+              <div className="flex-between mt-6">
+                <button type="button" className="btn btn-outline" onClick={() => setShowModal(false)}>Cancel</button>
+                <button type="submit" className="btn btn-primary" style={{ padding: '0.625rem 2rem' }}>Create Customer</button>
               </div>
             </form>
           </div>

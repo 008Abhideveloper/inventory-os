@@ -20,7 +20,7 @@ function AppLayout({ theme, toggleTheme }) {
   return (
     <div className={isAuthPage ? '' : 'app-container'}>
       {!isAuthPage && <Sidebar theme={theme} toggleTheme={toggleTheme} />}
-      <main className={isAuthPage ? '' : 'main-content'} style={isAuthPage ? { height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' } : {}}>
+      <main className={isAuthPage ? '' : 'main-content'}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

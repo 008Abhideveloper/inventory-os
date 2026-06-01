@@ -113,9 +113,12 @@ const Orders = () => {
   };
 
   return (
-    <div>
-      <div className="flex-between mb-6">
-        <h1>Orders</h1>
+    <div className="animation-fade-in">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Orders</h1>
+          <p className="text-muted mt-2">Track and manage customer orders</p>
+        </div>
         <button 
           className="btn btn-primary"
           onClick={() => {
@@ -133,25 +136,45 @@ const Orders = () => {
             <tr>
               <th>Order ID</th>
               <th>Customer</th>
-              <th>Total Amount</th>
               <th>Date</th>
-              <th>Actions</th>
+              <th>Status</th>
+              <th>Total Amount</th>
+              <th style={{ textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {orders.map((o) => (
               <tr key={o.id}>
-                <td>#{o.id}</td>
-                <td>{getCustomerName(o.customer_id)}</td>
-                <td>${o.total_amount.toFixed(2)}</td>
-                <td>{new Date(o.created_at).toLocaleString()}</td>
                 <td>
-                  <div className="flex gap-2" style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button className="btn btn-primary" style={{ padding: '0.25rem 0.5rem' }} onClick={() => viewOrder(o)}>
-                      <FiEye size={14} />
+                  <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>#{o.id}</span>
+                </td>
+                <td>
+                  <div className="flex" style={{ alignItems: 'center', gap: '0.75rem' }}>
+                    <div className="avatar" style={{ width: '28px', height: '28px', fontSize: '0.75rem' }}>
+                      {getCustomerName(o.customer_id).charAt(0).toUpperCase()}
+                    </div>
+                    <span style={{ fontWeight: 500 }}>{getCustomerName(o.customer_id)}</span>
+                  </div>
+                </td>
+                <td>
+                  <div className="text-muted" style={{ fontSize: '0.875rem' }}>
+                    {new Date(o.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </div>
+                </td>
+                <td>
+                  <span className="badge badge-success">
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'currentColor', display: 'inline-block' }}></span>
+                    Completed
+                  </span>
+                </td>
+                <td style={{ fontWeight: 600 }}>${o.total_amount.toFixed(2)}</td>
+                <td>
+                  <div className="flex gap-2" style={{ justifyContent: 'flex-end' }}>
+                    <button className="btn btn-outline" style={{ padding: '0.4rem', border: 'none', color: 'var(--primary-color)' }} onClick={() => viewOrder(o)}>
+                      <FiEye size={16} />
                     </button>
-                    <button className="btn btn-danger" style={{ padding: '0.25rem 0.5rem' }} onClick={() => handleDelete(o.id)}>
-                      <FiTrash2 size={14} />
+                    <button className="btn btn-outline" style={{ padding: '0.4rem', border: 'none', color: 'var(--danger-color)' }} onClick={() => handleDelete(o.id)}>
+                      <FiTrash2 size={16} />
                     </button>
                   </div>
                 </td>
@@ -159,7 +182,16 @@ const Orders = () => {
             ))}
             {orders.length === 0 && (
               <tr>
-                <td colSpan="5" style={{ textAlign: 'center' }}>No orders found</td>
+                <td colSpan="6" className="text-center text-muted" style={{ padding: '4rem 2rem' }}>
+                  <div className="flex-center" style={{ flexDirection: 'column', gap: '1rem' }}>
+                    <FiShoppingCart size={48} style={{ opacity: 0.3 }} />
+                    <h3 style={{ color: 'var(--text-main)' }}>No orders yet</h3>
+                    <p>Create your first order to start tracking sales.</p>
+                    <button className="btn btn-primary mt-4" onClick={() => setShowModal(true)}>
+                      <FiPlus /> Create Order
+                    </button>
+                  </div>
+                </td>
               </tr>
             )}
           </tbody>
@@ -169,81 +201,86 @@ const Orders = () => {
       {/* Create Order Modal */}
       {showModal && (
         <div className="modal-overlay">
-          <div className="modal-content" style={{ maxWidth: '600px' }}>
+          <div className="modal-content" style={{ maxWidth: '650px' }}>
             <div className="modal-header">
-              <h2 className="modal-title">Create Order</h2>
+              <h2 className="modal-title">Create New Order</h2>
               <button className="modal-close" onClick={() => setShowModal(false)}>&times;</button>
             </div>
-            {error && <div style={{ color: 'var(--danger-color)', marginBottom: '1rem' }}>{error}</div>}
+            {error && <div className="badge badge-danger mb-4 w-full flex-center p-3">{error}</div>}
             
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label className="form-label">Customer</label>
+                <label className="form-label">Select Customer</label>
                 <select 
                   className="form-control"
                   value={formData.customer_id}
                   onChange={(e) => setFormData({...formData, customer_id: e.target.value})}
                   required
                 >
-                  <option value="">Select a customer</option>
+                  <option value="">-- Choose a customer --</option>
                   {customers.map(c => (
                     <option key={c.id} value={c.id}>{c.full_name} ({c.email})</option>
                   ))}
                 </select>
               </div>
 
-              <div className="mb-4">
-                <div className="flex-between mb-2">
+              <div className="mb-6">
+                <div className="flex-between mb-4">
                   <label className="form-label" style={{ marginBottom: 0 }}>Order Items</label>
-                  <button type="button" className="btn btn-primary" style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }} onClick={handleAddItem}>
-                    + Add Item
+                  <button type="button" className="btn btn-outline" style={{ padding: '0.4rem 0.75rem', fontSize: '0.8rem' }} onClick={handleAddItem}>
+                    <FiPlus /> Add Item
                   </button>
                 </div>
                 
-                {formData.items.map((item, index) => (
-                  <div key={index} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <select 
-                      className="form-control"
-                      value={item.product_id}
-                      onChange={(e) => handleItemChange(index, 'product_id', e.target.value)}
-                      required
-                      style={{ flex: 2 }}
-                    >
-                      <option value="">Select a product</option>
-                      {products.map(p => (
-                        <option key={p.id} value={p.id} disabled={p.quantity === 0}>
-                          {p.name} - ${p.price} ({p.quantity} in stock)
-                        </option>
-                      ))}
-                    </select>
-                    
-                    <input 
-                      type="number" 
-                      className="form-control"
-                      value={item.quantity}
-                      onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                      min="1"
-                      required
-                      style={{ flex: 1 }}
-                    />
-                    
-                    {formData.items.length > 1 && (
-                      <button 
-                        type="button" 
-                        className="btn btn-danger" 
-                        onClick={() => handleRemoveItem(index)}
-                        style={{ padding: '0 0.75rem' }}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {formData.items.map((item, index) => (
+                    <div key={index} className="flex" style={{ gap: '0.75rem', alignItems: 'center', backgroundColor: 'var(--table-hover-bg)', padding: '0.75rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+                      <select 
+                        className="form-control"
+                        value={item.product_id}
+                        onChange={(e) => handleItemChange(index, 'product_id', e.target.value)}
+                        required
+                        style={{ flex: 2, margin: 0, backgroundColor: 'var(--card-bg)' }}
                       >
-                        <FiTrash2 />
-                      </button>
-                    )}
-                  </div>
-                ))}
+                        <option value="">Select a product...</option>
+                        {products.map(p => (
+                          <option key={p.id} value={p.id} disabled={p.quantity === 0}>
+                            {p.name} - ${p.price} ({p.quantity} in stock)
+                          </option>
+                        ))}
+                      </select>
+                      
+                      <div className="flex" style={{ alignItems: 'center', gap: '0.5rem', flex: 1 }}>
+                        <span className="text-muted" style={{ fontSize: '0.875rem' }}>Qty:</span>
+                        <input 
+                          type="number" 
+                          className="form-control"
+                          value={item.quantity}
+                          onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                          min="1"
+                          required
+                          style={{ margin: 0, backgroundColor: 'var(--card-bg)' }}
+                        />
+                      </div>
+                      
+                      {formData.items.length > 1 && (
+                        <button 
+                          type="button" 
+                          className="btn btn-outline" 
+                          onClick={() => handleRemoveItem(index)}
+                          style={{ padding: '0.5rem', border: 'none', color: 'var(--danger-color)' }}
+                        >
+                          <FiTrash2 />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="flex-between mt-4">
-                <button type="button" className="btn" onClick={() => setShowModal(false)}>Cancel</button>
-                <button type="submit" className="btn btn-primary">Create Order</button>
+              <div className="flex-between mt-6 pt-6" style={{ borderTop: '1px solid var(--border-color)' }}>
+                <button type="button" className="btn btn-outline" onClick={() => setShowModal(false)}>Cancel</button>
+                <button type="submit" className="btn btn-primary" style={{ padding: '0.625rem 2rem' }}>Process Order</button>
               </div>
             </form>
           </div>
@@ -253,43 +290,71 @@ const Orders = () => {
       {/* View Order Modal */}
       {showViewModal && selectedOrder && (
         <div className="modal-overlay">
-          <div className="modal-content">
+          <div className="modal-content" style={{ maxWidth: '650px' }}>
             <div className="modal-header">
-              <h2 className="modal-title">Order #{selectedOrder.id} Details</h2>
+              <div>
+                <h2 className="modal-title">Invoice #{selectedOrder.id}</h2>
+                <div className="text-muted mt-1" style={{ fontSize: '0.875rem' }}>
+                  {new Date(selectedOrder.created_at).toLocaleString()}
+                </div>
+              </div>
               <button className="modal-close" onClick={() => setShowViewModal(false)}>&times;</button>
             </div>
             
-            <div className="mb-4">
-              <p><strong>Customer:</strong> {getCustomerName(selectedOrder.customer_id)}</p>
-              <p><strong>Date:</strong> {new Date(selectedOrder.created_at).toLocaleString()}</p>
-              <p><strong>Total Amount:</strong> ${selectedOrder.total_amount.toFixed(2)}</p>
+            <div className="mb-6 flex" style={{ gap: '2rem', padding: '1.5rem', backgroundColor: 'var(--table-hover-bg)', borderRadius: 'var(--radius-md)' }}>
+              <div>
+                <div className="text-muted" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Billed To</div>
+                <div style={{ fontWeight: 600, fontSize: '1.1rem' }}>{getCustomerName(selectedOrder.customer_id)}</div>
+                <div className="text-muted" style={{ fontSize: '0.875rem' }}>Customer ID: #{selectedOrder.customer_id}</div>
+              </div>
+              <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                <div className="text-muted" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Status</div>
+                <span className="badge badge-success">Paid</span>
+              </div>
             </div>
             
-            <h3 className="mb-2" style={{ fontSize: '1rem' }}>Items:</h3>
-            <div className="table-container">
+            <div className="table-container" style={{ boxShadow: 'none', border: '1px solid var(--border-color)' }}>
               <table>
                 <thead>
                   <tr>
-                    <th>Product</th>
+                    <th>Item Description</th>
                     <th>Price</th>
                     <th>Qty</th>
-                    <th>Subtotal</th>
+                    <th style={{ textAlign: 'right' }}>Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {selectedOrder.items.map(item => (
                     <tr key={item.id}>
-                      <td>{getProductName(item.product_id)}</td>
-                      <td>${item.price_at_time.toFixed(2)}</td>
-                      <td>{item.quantity}</td>
-                      <td>${(item.price_at_time * item.quantity).toFixed(2)}</td>
+                      <td style={{ fontWeight: 500 }}>{getProductName(item.product_id)}</td>
+                      <td className="text-muted">${item.price_at_time.toFixed(2)}</td>
+                      <td className="text-muted">{item.quantity}</td>
+                      <td style={{ textAlign: 'right', fontWeight: 500 }}>${(item.price_at_time * item.quantity).toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
             
-            <div className="mt-6 text-right" style={{ textAlign: 'right' }}>
+            <div className="flex mt-6 pt-4" style={{ justifyContent: 'flex-end', borderTop: '1px solid var(--border-color)' }}>
+              <div style={{ width: '250px' }}>
+                <div className="flex-between mb-2">
+                  <span className="text-muted">Subtotal</span>
+                  <span>${selectedOrder.total_amount.toFixed(2)}</span>
+                </div>
+                <div className="flex-between mb-4">
+                  <span className="text-muted">Tax</span>
+                  <span>$0.00</span>
+                </div>
+                <div className="flex-between pt-4" style={{ borderTop: '1px solid var(--border-color)', fontSize: '1.25rem', fontWeight: 700 }}>
+                  <span>Total</span>
+                  <span style={{ color: 'var(--primary-color)' }}>${selectedOrder.total_amount.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-8 text-right flex gap-4" style={{ justifyContent: 'flex-end' }}>
+              <button className="btn btn-outline" onClick={() => window.print()}>Print Invoice</button>
               <button className="btn btn-primary" onClick={() => setShowViewModal(false)}>Close</button>
             </div>
           </div>
