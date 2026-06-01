@@ -45,7 +45,7 @@ const Customers = () => {
     }
   };
 
-  return (
+
   return (
     <div className="animation-fade-in">
       <div className="page-header">
@@ -53,7 +53,7 @@ const Customers = () => {
           <h1 className="page-title">Customers</h1>
           <p className="text-muted mt-2">Manage your customer relationships</p>
         </div>
-        <button 
+        <button
           className="btn btn-primary"
           onClick={() => {
             setFormData({ full_name: '', email: '', phone: '' });
@@ -128,33 +128,33 @@ const Customers = () => {
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label className="form-label">Full Name</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={formData.full_name} 
-                  onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                <input
+                  type="text"
+                  className="form-control"
+                  value={formData.full_name}
+                  onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                   required
                   placeholder="e.g. Jane Doe"
                 />
               </div>
               <div className="form-group">
                 <label className="form-label">Email Address</label>
-                <input 
-                  type="email" 
-                  className="form-control" 
-                  value={formData.email} 
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                <input
+                  type="email"
+                  className="form-control"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
                   placeholder="jane@example.com"
                 />
               </div>
               <div className="form-group">
                 <label className="form-label">Phone Number <span className="text-muted" style={{ fontWeight: 'normal' }}>(Optional)</span></label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  value={formData.phone} 
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                <input
+                  type="text"
+                  className="form-control"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   placeholder="+1 (555) 000-0000"
                 />
               </div>
