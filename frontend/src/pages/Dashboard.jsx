@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../api';
 import { FiBox, FiUsers, FiShoppingCart, FiAlertCircle } from 'react-icons/fi';
 
@@ -11,10 +11,6 @@ const Dashboard = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchSummary();
-  }, []);
-
   const fetchSummary = async () => {
     try {
       const response = await api.get('/dashboard-summary');
@@ -25,6 +21,10 @@ const Dashboard = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchSummary();
+  }, []);
 
   if (loading) return <div>Loading dashboard...</div>;
 

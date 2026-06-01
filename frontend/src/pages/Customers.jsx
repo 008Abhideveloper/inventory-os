@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../api';
 import { FiPlus, FiTrash2 } from 'react-icons/fi';
 
@@ -8,10 +8,6 @@ const Customers = () => {
   const [formData, setFormData] = useState({ full_name: '', email: '', phone: '' });
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchCustomers();
-  }, []);
-
   const fetchCustomers = async () => {
     try {
       const res = await api.get('/customers');
@@ -20,6 +16,10 @@ const Customers = () => {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

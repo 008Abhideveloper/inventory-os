@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../api';
 import { FiPlus, FiTrash2, FiEye } from 'react-icons/fi';
 
@@ -14,10 +14,6 @@ const Orders = () => {
   const [formData, setFormData] = useState({ customer_id: '', items: [{ product_id: '', quantity: 1 }] });
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const [ordersRes, customersRes, productsRes] = await Promise.all([
@@ -32,6 +28,10 @@ const Orders = () => {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleAddItem = () => {
     setFormData({

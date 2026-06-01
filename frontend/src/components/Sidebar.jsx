@@ -1,8 +1,15 @@
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { FiHome, FiBox, FiUsers, FiShoppingCart, FiSun, FiMoon } from 'react-icons/fi';
+import { FiHome, FiBox, FiUsers, FiShoppingCart, FiSun, FiMoon, FiLogOut } from 'react-icons/fi';
 
 const Sidebar = ({ theme, toggleTheme }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -41,12 +48,15 @@ const Sidebar = ({ theme, toggleTheme }) => {
         </NavLink>
       </nav>
       <div className="theme-toggle-container">
-        <button className="btn btn-outline" style={{ width: '100%', justifyContent: 'center' }} onClick={toggleTheme}>
+        <button className="btn btn-outline" style={{ width: '100%', justifyContent: 'center', marginBottom: '0.5rem' }} onClick={toggleTheme}>
           {theme === 'light' ? (
-            <><FiMoon size={18} /> Dark Mode</>
+            <><FiMoon size={18} style={{ marginRight: '0.5rem' }} /> Dark Mode</>
           ) : (
-            <><FiSun size={18} /> Light Mode</>
+            <><FiSun size={18} style={{ marginRight: '0.5rem' }} /> Light Mode</>
           )}
+        </button>
+        <button className="btn btn-danger" style={{ width: '100%', justifyContent: 'center', display: 'flex', alignItems: 'center' }} onClick={handleLogout}>
+          <FiLogOut size={18} style={{ marginRight: '0.5rem' }} /> Logout
         </button>
       </div>
     </aside>

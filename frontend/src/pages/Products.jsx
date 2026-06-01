@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../api';
 import { FiPlus, FiEdit2, FiTrash2 } from 'react-icons/fi';
 
@@ -9,10 +9,6 @@ const Products = () => {
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
   const fetchProducts = async () => {
     try {
       const res = await api.get('/products');
@@ -21,6 +17,10 @@ const Products = () => {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
