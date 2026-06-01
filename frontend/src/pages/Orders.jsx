@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../api';
-import { FiPlus, FiTrash2, FiEye } from 'react-icons/fi';
+import { FiPlus, FiTrash2, FiEye, FiShoppingCart } from 'react-icons/fi';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);

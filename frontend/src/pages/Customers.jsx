@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../api';
-import { FiPlus, FiTrash2 } from 'react-icons/fi';
+import { FiPlus, FiTrash2, FiUsers } from 'react-icons/fi';
 
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
