@@ -58,7 +58,6 @@ const Products = () => {
   };
 
   return (
-  return (
     <div className="animation-fade-in">
       <div className="page-header">
         <div>
